@@ -1,0 +1,45 @@
+h2 {
+    color: #e2e2e2;
+}
+
+form {
+    margin: auto;
+    background-color: #ffffff77;
+    width: 50%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+input[type="text"], select {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #333;
+}
+
+input[type="text"]:focus, select:focus {
+    background-color: rgba(255, 255, 255, 0.7);
+    outline: none;
+}
+
+button {
+    width: 80%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}

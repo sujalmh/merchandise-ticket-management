@@ -1,0 +1,64 @@
+/* Table Styles */
+table {
+    margin: auto;
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    
+    border-bottom: 1px solid #ddd; /* Add a bottom border to each cell to separate rows */
+    text-align: left;
+    padding: 4px;
+}
+
+th {
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+tr {
+    background-color: #fff; /* Set all rows to white */
+}
+
+td {
+    text-align: center;
+}
+
+/* Last cell in each row should not have a bottom border to avoid double lines */
+td:last-child {
+    border-bottom: none;
+}
+
+/* Button Styles */
+.toggle-paid-btn-paid {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.toggle-paid-btn-notpaid {
+    background-color: #ce0808; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.toggle-paid-btn:hover {
+    background-color: #45a049;
+}

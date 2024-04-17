@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan QR</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/organiser_dashboard.css') }}">
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <nav class="navbar ">
+        <span class="title">
+            Scan QR
+        </span>
+        <a href="{{ url_for('logout') }}" id="logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+    </nav>
+      
+
+    <main>
+        <img class="sentia-logo" src="{{ url_for('static', filename='images/sentia-logo.png') }}">
+
+        <div class="content-container" style="width: 90%; height: fit-content;">
+            <div id="qr-reader" style="margin: auto; width: 90%;"></div>
+        </div>
+
+        <a href="{{ url_for('user_dashboard') }}" class="icon-btn"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard</a>
+    </main>
+
+    <div id="userDetailsModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span id="close-btn">Close <span id="x">&times;</span></span>
+            <div id="modal-user-details"></div>
+        </div>
+    </div>
+    
+    <script>
+        var html5QrCode = new Html5Qrcode("qr-reader");
+
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log(decodedText);
+            fetch('/user_details/' + decodedText)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.error) {
+                        alert("User not found");
+                    } else {
+                        const modalUserDetailsDiv = document.getElementById("modal-user-details");
+                        modalUserDetailsDiv.innerHTML = `
+                            <p>USN: ${data.usn}</p>
+                            <p>Paid: ${data.paid ? '<span class="green-dot"></span> Yes' : '<span class="red-dot"></span> No'}</span></p>
+                            <p>TShirt Status: <span id="status"> ${data.tshirt_status ? '<span class="green-dot"></span> Recieved' : '<span class="red-dot"></span> Did not Recieve'}</span></p>
+                            <button class="icon-btn" onclick="toggleDinnerStatus('${data.usn}')">Toggle TShirt Status</button>
+                        `;
+                        document.getElementById('userDetailsModal').style.display = 'block';
+                    }
+                    document.getElementById('scan-again').style.display = 'block';
+                })
+                .catch(err => console.log(err));
+            html5QrCode.stop();
+        }
+
+        document.getElementById('close-btn').addEventListener('click', function() {
+            document.getElementById('userDetailsModal').style.display = 'none';
+        });
+
+        function onScanFailure(error) {
+            console.warn(`QR error: ${error}`);
+        }
+
+        function startScanning() {
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: 250 },
+                onScanSuccess,
+                onScanFailure
+            ).then(() => {
+                document.getElementById('scan-again').style.display = 'none';
+            }).catch(err => console.error(`Unable to start scanning, ${err}`));
+        }
+
+        document.addEventListener('DOMContentLoaded', startScanning);
+
+        document.getElementById('close-btn').addEventListener('click', startScanning);
+
+        function toggleDinnerStatus(usn) {
+            fetch('/toggle_shirt_status/' + usn, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        dinner = document.getElementById("status");
+                        if (data.shirt_status) {
+                            dinner.innerHTML = '<span class="green-dot"></span> Received';
+                        } else {
+                            dinner.innerHTML = '<span class="red-dot"></span> Did not Receive';
+                        }
+                    } else {
+                        alert("Failed to toggle dinner status");
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+    </script>
+</body>
+</html>

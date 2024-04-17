@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/superadmin_dashboard.css') }}">
+    <title>Superadmin Dashboard</title>
+</head>
+<body>
+    <nav style="margin-bottom: 10px;">     
+        <span class="title">
+            Dashboard
+        </span>
+        <a href="{{ url_for('logout') }}" id="logout"><i class="fa fa-sign-out"aria-hidden="true"></i></a>
+    </nav>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+    <div class="dashboard-header">
+        <a class="icon-btn" href="{{ url_for('manage') }}" style="margin: auto;width: 20%;"><i class="fa fa-pencil" aria-hidden="true"></i> Manage Classes</a>
+        <a class="icon-btn" href="{{ url_for('add_size_form') }}" style="margin: auto;width: 20%;"><i class="fa fa-plus" aria-hidden="true"></i> Add Sizes</a>
+        <a class="icon-btn" href="{{ url_for('export_details') }}" style="margin: auto;width: 20%;"><i class="fa fa-download" aria-hidden="true"></i> Export Data</a>
+    </div>
+    {% for branch in branches %}
+    <div class="branch-container">
+        <div class="branch-name"><h2>{{ branch.name }}</h2></div>
+        {% for sem, classes in branch.semesters.items() %}
+        <div class="semester">
+            <h3>Semester {{ sem }}</h3>
+            <ul>
+                {% for class_ in classes %}
+                <li><a href="{{ url_for('class_users', class_id=class_.id) }}" style="display: inline;">{{ class_.section }}</a> -    
+                    <form action="{{ url_for('delete_class') }}" method="post" onsubmit="return confirm('Are you sure you want to delete this class?');" style="display: inline;">
+                        <input type="hidden" name="class_id" value="{{ class_.id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</body>
+</html>

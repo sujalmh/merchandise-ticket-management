@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/superadmin_dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manage.css') }}">
+    <title>Manage Branches and Classes</title>
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+    <div class="content-container">
+        <h2>Manage Branches</h2>
+        <form action="{{ url_for('add_branch') }}" method="post">
+            <input type="text" name="branch_name" placeholder="Branch Name" required>
+            <input type="text" name="branch_code" placeholder="Branch Code" required>
+            <button type="submit">Add Branch</button>
+        </form>
+    
+        <h2>Manage Classes</h2>
+        <form action="/add_class" method="post">
+            <select name="branch_id" required>
+                <option value="">Select Branch</option>
+                {% for branch in branches %}
+                <option value="{{ branch.id }}">{{ branch.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="sem" placeholder="Class Semester" required>
+            <input type="text" name="section" placeholder="Class Section" required>
+            <button type="submit">Add Class</button>
+        </form>
+        </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="icon-btn" style="margin: auto;width: 30%;">Back to dashboard</a>
+</body>
+</html>

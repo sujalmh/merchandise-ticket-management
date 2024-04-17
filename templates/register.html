@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>   
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div id="flash-{{ category }}" class="alert alert-{{ category }} alert-dismissible fade show" role="alert" style="position: absolute; left: 0; right: 0; margin: auto; text-align: center; justify-content: center; align-items: center; top: 10px; z-index: 1050; max-width: 600px;" >{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" id="alert-close" aria-label="Close" >
+                        <span aria-hidden="true" style="position: absolute; right: 10px; top: 5px;">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <script src="{{ url_for('static', filename='js/alert.js') }}"></script>
+
+    
+    <img class="sentia-logo" src="{{ url_for('static', filename='images/sentia-logo.png') }}">
+    <form action="/register" method="post">
+        <h3>Register</h3>
+        <input type="text" id="usn" name="usn" placeholder="USN" pattern="4MT\d{2}[A-Z]{2}\d{3}" title="USN must be in the format 4MTXXYYZZZ (e.g., 4MT15CS001)." required>
+        <div class="password-container">
+            <input type="password" name="password" placeholder="Password" id="password" required>
+            <i class="fa fa-eye toggle-visibility" id="toggleVisibility" onclick="togglePasswordVisibility()" aria-hidden="true"></i>
+        </div>
+        <script>
+            function togglePasswordVisibility() {
+                var passwordInput = document.getElementById("password");
+                var toggleButton = document.getElementById("toggleVisibility");
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    toggleButton.classList.toggle("fa-eye");
+                    toggleButton.classList.toggle("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    toggleButton.classList.toggle("fa-eye");
+                    toggleButton.classList.toggle("fa-eye-slash");
+                }
+            }
+        </script>    
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number" pattern="\+?1?\d{9,15}" title="Phone number must be between 9 to 15 digits." required >
+        <input type="text" id="branchName" name="branchName" placeholder="Enter USN to select Branch" disabled>
+        <select name="sem" id="sem" required>
+            <option value="" >Select Semester</option>
+        </select>
+        <select name="class_id" id="class_id" required>
+            <option value="">Select Class</option>
+        </select>
+        <select name="size" id="sizeSelect" required>
+            <option value="">Select Size</option>
+        </select>
+        <div class="chart"><a id="viewChartLink" href="#">View Design and Size Chart</a></div>
+
+        <button type="submit">Register</button>
+        <p style="text-align: center;margin-top: 5px;">Or</p>
+        <p style="text-align: center;margin-top: 13px;"><a href="{{ url_for('login') }}" style="background-color: rgb(230, 230, 230); color: #000; text-decoration: none; padding: 10px 15px; border-radius: 5px; font-weight: 550; font-size: 18px;"><i class="fa fa-user-plus" aria-hidden="true" style="color: #000;"></i> Login</a></p>
+    </form>
+
+    <div id="designSizeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Design and <br> Size Chart</h2>
+            <div class="gallery">
+                <img class="model-image" src="{{ url_for('static', filename='images/tshirt-front.png') }}">
+                <img class="model-image" src="{{ url_for('static', filename='images/tshirt-back.png') }}">
+
+                <img class="model-image" src="{{ url_for('static', filename='images/size-chart.png') }}" style="border-radius: 10px; margin-top: 10px;">
+            </div>
+            <div class="close close-button">Close</div>
+        </div>
+    </div>
+    
+    <script>
+        var modal = document.getElementById('designSizeModal');
+        var btn = document.querySelector('.chart a');
+        var span = document.getElementsByClassName('close')[0];
+        var close = document.getElementsByClassName('close')[1]
+        btn.onclick = function() {
+            modal.style.display = 'block';
+        }
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+        close.onclick = function() {
+            modal.style.display = 'none';
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var branches = {};
+            $.getJSON('/get_branches', function(data) {
+                branches = data;
+            });
+            $('#usn').on('input', function() {
+                var usn = $(this).val().toUpperCase();
+                if(usn.length >= 7) {
+                    var branchCode = usn.substring(5, 7);
+                    var branchName = branches[branchCode];
+                    if(branchName) {
+                        $('#branchName').val(branchName);
+                        $.getJSON(`/get_semesters/${branchCode}`, function(semesters) {
+                            var semSelect = $('#sem');
+                            semSelect.empty().append($('<option></option>').attr('value', '').text('Select Semester'));
+                            $.each(semesters, function(index, sem) {
+                                semSelect.append($('<option></option>').attr('value', sem).text(sem));
+                            });
+                        }).fail(function() {
+                            console.log("Error fetching semesters for branch: " + branchCode);
+                            $('#sem').empty();
+                        });
+                    } else {
+                        $('#branchName').val('Invalid Branch');
+                        $('#sem').empty();
+                        $('#class_id').empty();
+                    }
+                }
+            });
+
+            $('#sem').on('change', function() {
+                var sem = $(this).val();
+                var branchCode = $('#usn').val().substring(5, 7).toUpperCase();
+                if(sem && branchCode) {
+                    $.getJSON(`/get_classes/${branchCode}/${sem}`, function(classes) {
+                        var classSelect = $('#class_id');
+                        classSelect.empty().append($('<option></option>').attr('value', '').text('Select Class'));
+                        $.each(classes, function(id, name) {
+                            classSelect.append($('<option></option>').attr('value', id).text(name));
+                        });
+                    }).fail(function() {
+                        console.log("Error fetching classes for branch: " + branchCode + " and semester: " + sem);
+                        $('#class_id').empty();
+                    });
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var usnInput = document.getElementById('usn');
+            usnInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/get_sizes')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('sizeSelect');
+                    data.forEach(size => {
+                        const option = document.createElement('option');
+                        option.value = size;
+                        option.textContent = size;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching sizes:', error));
+        });
+    </script>   
+</body>
+</html>

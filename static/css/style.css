@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+html {
+    min-height: 100vh;
+    font-family: "Roboto", sans-serif;
+}
+
+body {
+    background: rgb(14,0,40);
+    background: linear-gradient(0deg, rgb(129, 2, 91) 0%, rgba(25,0,79,1) 43%, rgba(14,0,40,1) 100%); margin: 10px;
+    margin: 30px 20px;
+}
+
+nav {
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    width: 90%;
+    color: #cccccc;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background-color: rgba(55, 55, 55, 0.279);
+    border-radius: 13px;
+    box-shadow: 0 4px 30px rgba(151, 151, 151, 0.208);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+}
+
+nav .title {
+    color: #fff;
+    font-size: 50px;
+}
+
+#logout {
+    position: absolute;
+    vertical-align: middle;
+    top: 25%;
+    color: #fff;
+    text-decoration: none;
+    z-index: 1;
+    font-size: 25px;
+    right: 5px;
+    margin-right: 5px;
+}
+
+.green-dot {
+    height: 12px;
+    width: 12px;
+    background-color: #4BB543;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.red-dot {
+height: 12px;
+width: 12px;
+background-color: #DC3545;
+border-radius: 50%;
+display: inline-block;
+}
+
+.linear-text-gradient {
+    text-align: center;
+    background: linear-gradient(0deg, rgba(202,189,4,1) 0%, rgba(235,224,43,1) 24%, rgba(255,255,255,1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hamburger-menu {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+/* Style for nav-links container */
+.nav-links {
+    margin-top: 10px;
+}
+
+.nav-links a {
+    display: block;
+    text-decoration: none;
+    color: #000; /* Change color as needed */
+    padding: 8px;
+    margin: 5px 0;
+}
+
+/* Style adjustments for screen width less than 600px */
+@media (max-width: 600px) {
+    .nav-links a {
+        text-align: center;
+    }
+}
+
+.content-container {
+    margin: auto;
+    text-align: center;
+    justify-content: center;
+    width: 80%;
+    padding: 1% 5%;
+    color: #fff;
+    background-color: rgba(66, 66, 66, 0.13);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(98, 98, 98, 0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    -webkit-backdrop-filter: blur(8px);
+    margin-bottom: 10px;
+}
+
+.sentia-logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 100px;
+    width: auto;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+main {
+    z-index: 1000;
+}
+
+main::after {
+    z-index: 1000;
+}
+
+::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  html {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+.icon-btn {
+    display: block;
+    background-color: #fb830f;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    box-shadow: 0 0 20px rgba(8,7,16,0.6);
+    transition: all 0.4s;
+    text-align: center;
+}
+  
+.down-btn:hover {
+    background-color: rgb(3, 37, 139);
+}
+
+.modal {
+    display: none;  
+    position: fixed;  
+    z-index: 1;  
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;   
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);   
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;  
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;  
+}
+
+.chart {
+    text-align: center;
+    font-size: 15px;
+    margin: 10px 0 10px 0;
+}
+
+.chart a {
+    text-decoration: none;
+}
+
+.size-chart{
+    color: #000;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+table th{
+    color: #000;
+}
+
+table td{
+    color: #000;
+}
+
+#designSizeModal {
+    text-align: center;
+    min-height: fit-content;
+}
+
+.model-image {
+    width: 100%;
+}
+
+.size-table {
+    width: 100%;
+}
+
+.size-table tr td, .size-table tr th{
+    color: #000;
+    text-align: center;
+    border: 1px solid #000;
+}
+
+.close-button{
+    float: none;
+    margin: auto;
+    margin-top: 5px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    box-shadow: 1px 1px #2222229b;
+    border: 2px solid #222;
+    background-color: #ffffff;
+    color: #222222;
+    font-weight: 600;
+    font-size: inherit;
+    padding: 2px 0 2px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-button{
+    float: none;
+    margin: auto;
+    margin-top: 5px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    width: 50%;
+    box-shadow: 0.5px 0.5px #2222229b;
+    border: 2px solid #222;
+    background-color: #ffffff;
+    color: #222222;
+    font-weight: 600;
+    font-size: inherit;
+    padding: 2px 0 2px 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+  
+@media (max-width:850px)  {
+    
+    body {
+        margin: 10px 5px;
+    }
+    
+    .linear-text-gradient {
+        text-align: center;
+        background: linear-gradient(0deg, rgba(202,189,4,1) 0%, rgba(235,224,43,1) 24%, rgba(255,255,255,1) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    .content-container {
+        padding: 2% 5%;
+        margin: auto;
+        margin-bottom: 10px;
+        width: 80%;
+    }    
+    nav .title {
+        font-size: 40px;
+    }
+}

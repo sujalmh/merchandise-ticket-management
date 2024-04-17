@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manage.css') }}">
+    <title>Manage Branches and Classes</title>
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+
+    <h2>Add New Size</h2>
+    <form action="/add_size" method="post">
+        <label for="sizeName">Size Name:</label>
+        <input type="text" id="sizeName" name="size_name" required>
+        <button type="submit">Add Size</button>
+    </form>
+
+    <a href="{{ url_for('admin_dashboard') }}" class="icon-btn" style="margin: auto;width: 30%;">Back to dashboard</a>
+
+</body>
+</html>

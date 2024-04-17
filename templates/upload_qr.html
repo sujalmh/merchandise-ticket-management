@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+<form action="{{ url_for('upload_qr') }}" method="post" enctype="multipart/form-data">
+    <h3>Upload Payment QR Code</h3>
+    <label for="qr_image">QR Image:</label>
+    <input type="file" id="qr_image" name="qr_image" required>
+
+    <fieldset>
+        <legend>Select Classes:</legend>
+        {% for class in classes %}
+        <div>
+            <input type="checkbox" id="class{{ class.id }}" name="classes[]" value="{{ class.id }}">
+            <label for="class{{ class.id }}">{{ class.sem }} - {{ class.section }}</label>
+        </div>
+        {% endfor %}
+    </fieldset>
+
+    <button type="submit">Upload QR Code</button>
+</form>
+
+</body>
+</html>

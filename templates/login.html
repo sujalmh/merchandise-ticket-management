@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>   
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div id="flash-{{ category }}" class="alert alert-{{ category }} alert-dismissible fade show" role="alert" style="position: absolute; left: 0; right: 0; margin: auto; text-align: center; justify-content: center; align-items: center; top: 10px; z-index: 1050; max-width: 600px;" >{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" id="alert-close" aria-label="Close" >
+                        <span aria-hidden="true" style="position: absolute; right: 10px; top: 5px;">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <script src="{{ url_for('static', filename='js/alert.js') }}"></script>
+  
+    <img class="sentia-logo" src="{{ url_for('static', filename='images/sentia-logo.png') }}">
+
+      <form action="/login" method="post">
+        <h3>Login</h3>
+  
+          <label for="username">USN</label>
+          <input type="text" id="usn" name="usn" placeholder="USN" required>
+  
+          <label for="password">Password</label>
+          <div class="password-container">
+            <input type="password" name="password" placeholder="Password" id="password" required>
+            <i class="fa fa-eye toggle-visibility" id="toggleVisibility" onclick="togglePasswordVisibility()" aria-hidden="true"></i>
+        </div>
+        <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+            var usnInput = document.getElementById('usn');
+            usnInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+        });
+
+            function togglePasswordVisibility() {
+                var passwordInput = document.getElementById("password");
+                var toggleButton = document.getElementById("toggleVisibility");
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    toggleButton.classList.toggle("fa-eye");
+                    toggleButton.classList.toggle("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    toggleButton.classList.toggle("fa-eye");
+                    toggleButton.classList.toggle("fa-eye-slash");
+                }
+            }
+        </script>    
+          <div class="space"></div>
+          <button>Log In</button>
+          <p style="text-align: center;margin-top: 5px;">Or</p>
+        <p style="text-align: center;margin-top: 13px;"><a href="{{ url_for('register') }}" style="background-color: rgb(230, 230, 230); color: #000; text-decoration: none; padding: 10px 15px; border-radius: 5px; font-weight: 550; font-size: 18px;"><i class="fa fa-user-plus" aria-hidden="true" style="color: #000;"></i> Register</a></p>
+      </form>
+
+</body>
+</html>

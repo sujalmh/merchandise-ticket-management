@@ -1,0 +1,48 @@
+.dashboard-header {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.dashboard-header .icon-btn {
+    display: inline-block;
+}
+.branch-container {
+    width: 80%;
+    margin: auto;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.branch-name {
+    color: #333333;
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+.semester {
+    margin-bottom: 5px;
+}
+.semester h3 {
+    color: #555555;
+    margin-bottom: 5px;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+ul li {
+    background-color: #e9e9e9;
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+}
+ul li a {
+    text-decoration: none;
+    color: #007bff;
+    display: block;
+}
+ul li a:hover {
+    color: #0056b3;
+}

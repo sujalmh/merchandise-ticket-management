@@ -1,0 +1,17 @@
+.content-container{
+    margin-top: 10px;
+    text-align: center;
+}
+#payment_qr {
+    width: 90%;
+    max-width: 500px;
+}
+.icon-btn {
+    margin: auto;
+    margin-top: 10px;
+    max-width: fit-content;
+}
+.h5{
+    font-size: 18px;
+    font-weight: 550;
+}

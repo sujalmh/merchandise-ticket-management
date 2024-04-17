@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/class_users.css') }}">
+    <title>Class Users</title>
+</head>
+<body>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+
+    <h2>Users in Class {{ class_.name }} of Branch {{ class_.branch.name }}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>USN</th>
+                <th>Phone Number</th>
+                <th>Name</th>
+                <th>Paid</th>
+                <th>Size</th>
+                <th>CR Status</th>
+                <th>Organiser Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.usn }}</td>
+                <td>{{ user.phone_number }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.paid }}</td>
+                <td>{{ user.size.size_name }}</td>
+                <td>
+                    <form action="{{ url_for('toggle_cr', user_id=user.id) }}" method="post" style="display: inline;">
+                        <button type="submit" class="{{ 'button-remove' if user.is_cr }}">{{ 'Remove CR' if user.is_cr else 'Make CR' }}</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ url_for('toggle_organiser', user_id=user.id) }}" method="post" style="display: inline;">
+                        <button type="submit" class="{{ 'button-remove' if user.is_organiser }}">{{ 'Remove Organiser' if user.is_organiser else 'Make Organiser' }}</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('admin_dashboard') }}" class="icon-btn" style="margin: auto;width: 30%; margin-top: 10px;">Back to dashboard</a>
+
+</body>
+</html>
