@@ -115,6 +115,7 @@
 
     <script>
         $(document).ready(function() {
+            var type = 0;
             var branches = {};
             $.getJSON('/get_branches', function(data) {
                 branches = data;
@@ -122,9 +123,42 @@
             $('#usn').on('input', function() {
                 var usn = $(this).val().toUpperCase();
                 if(usn.length >= 7) {
-                    var branchCode = usn.substring(5, 7);
+                    var branchCode = usn.substring(5, 7); //USN format
+                    var branchYear = usn.substring(3, 5); //1st year
+                    var branchMCA1 = usn.substring(4, 6); //MCA 1st year
+                    console.log(branchYear);
                     var branchName = branches[branchCode];
-                    if(branchName) {
+                    var branchNameY = branches[branchYear];
+                    var branchNameMCA1 = branches[branchMCA1];
+                    console.log(branchNameMCA1);
+                    if (branchNameMCA1) {
+                        type = 1;
+                        $('#branchName').val(branchNameMCA1);
+                        $.getJSON(`/get_semesters/${branchYear}`, function(semesters) {
+                            var semSelect = $('#sem');
+                            semSelect.empty().append($('<option></option>').attr('value', '').text('Select Semester'));
+                            $.each(semesters, function(index, sem) {
+                                semSelect.append($('<option></option>').attr('value', sem).text(sem));
+                            });
+                        }).fail(function() {
+                            console.log("Error fetching semesters for branch: " + branchYear);
+                            $('#sem').empty();
+                        });
+                    }else if (branchNameY) {
+                        type = 2;
+                        $('#branchName').val(branchNameY);
+                        $.getJSON(`/get_semesters/${branchYear}`, function(semesters) {
+                            var semSelect = $('#sem');
+                            semSelect.empty().append($('<option></option>').attr('value', '').text('Select Semester'));
+                            $.each(semesters, function(index, sem) {
+                                semSelect.append($('<option></option>').attr('value', sem).text(sem));
+                            });
+                        }).fail(function() {
+                            console.log("Error fetching semesters for branch: " + branchYear);
+                            $('#sem').empty();
+                        });
+                    } else if(branchName) {
+                        type = 3;
                         $('#branchName').val(branchName);
                         $.getJSON(`/get_semesters/${branchCode}`, function(semesters) {
                             var semSelect = $('#sem');
@@ -147,7 +181,32 @@
             $('#sem').on('change', function() {
                 var sem = $(this).val();
                 var branchCode = $('#usn').val().substring(5, 7).toUpperCase();
-                if(sem && branchCode) {
+                var branchYear = $('#usn').val().substring(3, 5);
+                var branchMCA1 = $('#usn').val().substring(4, 6);
+
+                if(sem && branchMCA1 && type==1) {
+                    $.getJSON(`/get_classes/${branchMCA1}/${sem}`, function(classes) {
+                        var classSelect = $('#class_id');
+                        classSelect.empty().append($('<option></option>').attr('value', '').text('Select Class'));
+                        $.each(classes, function(id, name) {
+                            classSelect.append($('<option></option>').attr('value', id).text(name));
+                        });
+                    }).fail(function() {
+                        console.log("Error fetching classes for branch: " + branchCode + " and semester: " + sem);
+                        $('#class_id').empty();
+                    });
+                }else if(sem && branchYear && type==2) {
+                    $.getJSON(`/get_classes/${branchYear}/${sem}`, function(classes) {
+                        var classSelect = $('#class_id');
+                        classSelect.empty().append($('<option></option>').attr('value', '').text('Select Class'));
+                        $.each(classes, function(id, name) {
+                            classSelect.append($('<option></option>').attr('value', id).text(name));
+                        });
+                    }).fail(function() {
+                        console.log("Error fetching classes for branch: " + branchCode + " and semester: " + sem);
+                        $('#class_id').empty();
+                    });
+                } else if(sem && branchCode && type==3) {
                     $.getJSON(`/get_classes/${branchCode}/${sem}`, function(classes) {
                         var classSelect = $('#class_id');
                         classSelect.empty().append($('<option></option>').attr('value', '').text('Select Class'));

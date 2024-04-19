@@ -74,7 +74,7 @@ class Size(db.Model):
 
 class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    sem = db.Column(db.Integer, nullable=False)
+    sem = db.Column(db.String(10), nullable=False)
     section = db.Column(db.String(10), nullable=False)
     branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=False)
     users = db.relationship('User', back_populates="class_")
@@ -236,15 +236,17 @@ def generate_image_url():
 @app.route('/dashboard')
 @login_required
 def user_dashboard():
-      
+    if current_user.get_id().startswith("superadmin"):
+        return redirect(url_for('admin_dashboard'))
+
     if current_user and current_user.size:
         size_name = current_user.size.size_name
     else:
         size_name = 'Not selected'
-    if current_user.paid:
-        data=generate_image_url()
-    else:
-        data=None        
+    # if current_user.paid:
+    #     data=generate_image_url()
+    # else:
+    #     data=None        
 
     return render_template('dashboard.html', user=current_user, size_name=size_name, img_data=None)
 
@@ -295,8 +297,7 @@ def index():
         if current_user.is_super_admin:
             return render_template('admin_dashboard.html',user=current_user)
         return render_template('dashboard.html',user=current_user)
-    users = User.query.all()
-    return render_template('login.html')
+    return redirect(url_for('login'))
 
 
 @app.route('/toggle_admin/<int:user_id>', methods=['POST'])
@@ -366,7 +367,7 @@ def add_class():
     if not current_user.is_super_admin:
         return 'Access denied', 403
     branch_id = request.form.get('branch_id', type=int)
-    sem = request.form.get('sem', type=int)
+    sem = request.form.get('sem', type=str)
     section = request.form.get('section', type=str)
     if branch_id and sem:
         
@@ -510,18 +511,19 @@ def toggle_organiser(user_id):
 @app.route('/toggle_paid/<usn>', methods=['POST'])
 @login_required
 def toggle_paid(usn):
-    if current_user.is_cr or current_user.is_organiser:
-        user = User.query.filter_by(usn=usn.upper()).first()
-        user.paid = not user.paid
-        db.session.commit()
+    if not current_user.get_id().startswith("superadmin"):
+        if not current_user.is_cr or not current_user.is_organiser:
+            flash('Only superadmins can perform this action.', 'error')
+            print("lol")
+            return redirect(url_for('user_dashboard'))
 
-        flash(f"Paid status toggled for user {user.usn}.", 'success')
-        print(current_user.class_id)
-        return redirect(url_for('cr_payment_dashboard', class_id=current_user.class_id))
-    else:
-        flash('Only superadmins can perform this action.', 'error')
-        print("lol")
-        return redirect(url_for('user_dashboard'))
+    user = User.query.filter_by(usn=usn.upper()).first()
+    user.paid = not user.paid
+    db.session.commit()
+
+    flash(f"Paid status toggled for user {user.usn}.", 'success')
+    print(current_user.class_id)
+    return redirect(url_for('cr_payment_dashboard', class_id=current_user.class_id))
 
 @app.route('/toggle_paid_qr/<int:user_id>', methods=['POST'])
 @login_required
@@ -623,13 +625,36 @@ def make_payment():
 @app.route('/payment_proofs')
 @login_required
 def payment_proofs():
-    if not current_user.is_cr or not current_user.is_organiser:
-        return url_for('user_dashboard')
+    if not (current_user.get_id().startswith("superadmin")):
+        if not(  current_user.is_cr or current_user.is_organiser ):
+            return redirect(url_for('user_dashboard'))
+    
+    branches = Branch.query.all()
+    for branch in branches:
+        semesters = {}
+        for class_ in branch.classes:
+            if class_.sem in semesters:
+                semesters[class_.sem].append(class_)
+            else:
+                semesters[class_.sem] = [class_]
+        branch.semesters = semesters
+    return render_template('payment_proofs.html', branches=branches)
+
+@app.route('/admin/approve_payments/<class_id>')
+@login_required
+def approve_payments(class_id):
     users_with_images = User.query \
-                        .filter(User.payment_proof_url.isnot(None)) \
-                        .filter(User.paid == False) \
-                        .all()
+                            .filter(User.payment_proof_url.isnot(None)) \
+                            .filter(User.paid == False) \
+                            .filter(User.class_id == int(class_id)) \
+                            .all()
     return render_template('user_images.html', users=users_with_images)
+
+
+@app.route('/admin/edit_branches')
+def edit_branches():
+    branches = Branch.query.all()
+    return render_template('edit_branches.html', branches=branches)
 
 if __name__ == '__main__':
     create_super_admin(app)

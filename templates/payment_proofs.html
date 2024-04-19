@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/superadmin_dashboard.css') }}">
+    <title>Payments</title>
+</head>
+<body>
+    <nav style="margin-bottom: 10px;">     
+        <span class="title">
+            Dashboard
+        </span>
+        <a href="{{ url_for('logout') }}" id="logout"><i class="fa fa-sign-out"aria-hidden="true"></i></a>
+    </nav>
+    <div class="bg-animation">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="stars4"></div>
+    </div>
+    {% for branch in branches %}
+    <div class="branch-container">
+        <div class="branch-name"><h2>{{ branch.name }}</h2></div>
+        {% for sem, classes in branch.semesters.items() %}
+        <div class="semester">
+            <h3>Semester {{ sem }}</h3>
+            <ul>
+                {% for class_ in classes %}
+                <li><a href="{{ url_for('approve_payments', class_id=class_.id) }}" style="display: inline;">{{ class_.section }}</a> - </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <a href="{{ url_for('user_dashboard') }}" class="icon-btn" style="margin: auto;width: 30%; margin-top: 10px;"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to dashboard</a>
+
+</body>
+</html>

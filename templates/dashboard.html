@@ -109,7 +109,10 @@
             <div class="row">
                 <p>You have not paid. Please pay to see your status and QR code.</p>
             </div>
-
+            <div class="row">
+                <a class="icon-btn" href="{{ url_for('make_payment')}}"><i class="fa fa-qrcode" aria-hidden="true" style="margin-right: 10px;"></i>Make Payment</a>
+            </div>
+        
         {% endif %}
     </div>
 
@@ -168,7 +171,7 @@
         });
     </script>
 
-    {% if user.is_cr or user.is_cr %}
+    {% if user.is_cr or user.is_organiser %}
     <div class="content-container"> 
         {% if user.is_cr %}
         <div class="row" style="margin-bottom: 5px;">
@@ -177,6 +180,10 @@
         {% endif %}
 
         {% if user.is_organiser %}
+        <div class="row" style="margin-bottom: 5px;">
+            <a class="icon-btn" href="{{ url_for('payment_proofs', class_id=user.class_id)}}"><i class="fa fa-money-bill" aria-hidden="true" style="margin-right: 10px;"></i>Approve Payments</a>
+        </div>
+
         <div class="row">
             <a class="icon-btn" href="{{ url_for('organiser_dashboard')}}"><i class="fa fa-qrcode" aria-hidden="true" style="margin-right: 10px;"></i>Scan QR</a>
         </div>
